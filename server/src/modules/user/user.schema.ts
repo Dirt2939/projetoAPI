@@ -13,7 +13,7 @@ export enum filter {
 }
 
 export const userUuidSchema = z.object({
-  params: z.object({
+  query: z.object({
     uuid: z.string().uuid({ message: "Invalid ID. Must be a UUID." }),
   }),
 });
@@ -88,7 +88,7 @@ const userBodySchema = z
   });
 
 export const userSchema = z.object({
-  body: userBodySchema
+  body: userBodySchema,
 });
 
 export const searchUserSchema = z.object({
@@ -100,9 +100,23 @@ export const searchUserSchema = z.object({
 });
 
 export const bulkUserSchema = z.object({
-  body: z.array(userBodySchema)
+  body: z.array(userBodySchema),
 });
 
-export type UpdateUsereData = z.infer<typeof searchUserSchema>["query"];
+export const updateUserSchema = userUuidSchema.merge(
+  z.object({
+    body: z.object({
+      name: z.string().optional(),
+      email: z.string().optional(),
+      phone: z.string().optional(),
+      isActive: z.boolean().optional(),
+      role: z.nativeEnum(Role).optional(),
+    }),
+  }),
+);
+
+export type UpdateUserDataBody = z.infer<typeof updateUserSchema>["body"];
+export type UpdateUserDataParams = z.infer<typeof updateUserSchema>["query"];
+export type SearchUserData = z.infer<typeof searchUserSchema>["query"];
 export type CreateUserData = z.infer<typeof userSchema>["body"];
-export type CreateBulkUserBody = z.infer<typeof bulkUserSchema>["body"];
+export type CreateBulkUserData = z.infer<typeof bulkUserSchema>["body"];

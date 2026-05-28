@@ -1,8 +1,9 @@
 import prisma from "../../shared/database/prisma.js";
-import {
-  type CreateBulkUserBody,
-  type CreateUserData,
-  type UpdateUsereData,
+import type {
+  CreateBulkUserData,
+  CreateUserData,
+  SearchUserData,
+  UpdateUserDataBody,
 } from "./user.schema.js";
 import bcryp from "bcrypt";
 
@@ -18,32 +19,33 @@ export const findByUuid = async (uuid: string) => {
   });
 };
 
-export const findMany = async (
-  userUpdate: UpdateUsereData,
-) => {
+export const findMany = async (usersSearch: SearchUserData) => {
   return prisma.user.findMany({
     where: {
-      ...(userUpdate.name ? { name: { contains: userUpdate.name } } : {}),
-      ...(userUpdate.email ? { email: { contains: userUpdate.email } } : {}),
-      ...(userUpdate.role ? { role: { equals: userUpdate.role } } : {}),
+      ...(usersSearch.name ? { name: { contains: usersSearch.name } } : {}),
+      ...(usersSearch.email ? { email: { contains: usersSearch.email } } : {}),
+      ...(usersSearch.role ? { role: usersSearch.role } : {}),
     },
   });
 };
 
-export const prepareUserData = async (userData: CreateUserData) => {
+const prepareUserData = async (userData: CreateUserData) => {
   const { confirmPassword, ...preparedUser } = userData;
   preparedUser.password = await bcryp.hash(preparedUser.password, 10);
 
   return preparedUser;
 };
 
-export const prepareManyUserData = async (usersData: CreateBulkUserBody) => {
+const prepareManyUserData = async (usersData: CreateBulkUserData) => {
   const preparedUsers = await Promise.all(
-    usersData.map(async ({confirmPassword, ...preparedUser}) => ({...preparedUser, password: await bcryp.hash(preparedUser.password, 10)}))
-  )
-  
-  return preparedUsers
-}
+    usersData.map(async ({ confirmPassword, ...preparedUser }) => ({
+      ...preparedUser,
+      password: await bcryp.hash(preparedUser.password, 10),
+    })),
+  );
+
+  return preparedUsers;
+};
 
 export const create = async (userData: CreateUserData) => {
   return await prisma.user.create({
@@ -51,7 +53,7 @@ export const create = async (userData: CreateUserData) => {
   });
 };
 
-export const createMany = async (usersData: CreateBulkUserBody) => {
+export const createMany = async (usersData: CreateBulkUserData) => {
   return await prisma.user.createMany({
     data: await prepareManyUserData(usersData),
   });
@@ -61,6 +63,21 @@ export const remove = async (uuid: string) => {
   return prisma.user.delete({
     where: {
       uuid,
+    },
+  });
+};
+
+export const update = async (uuid: string, userUpdate: UpdateUserDataBody) => {
+  return prisma.user.update({
+    where: { uuid: uuid },
+    data: {
+      ...(userUpdate.name ? { name: userUpdate.name } : {}),
+      ...(userUpdate.email ? { email: userUpdate.email } : {}),
+      ...(userUpdate.isActive !== undefined
+        ? { isActive: userUpdate.isActive }
+        : {}),
+      ...(userUpdate.phone ? { phone: userUpdate.phone } : {}),
+      ...(userUpdate.role ? { role: userUpdate.role } : {}),
     },
   });
 };

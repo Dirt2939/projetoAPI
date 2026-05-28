@@ -8,7 +8,6 @@ export const validate = (schema: z.ZodTypeAny) => {
     next: NextFunction,
   ): Promise<any> => {
     try {
-      console.log(req.query)
       await schema.parseAsync({
         body: req.body,
         params: req.params,

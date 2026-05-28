@@ -5,17 +5,14 @@ import * as userController from "./user.controller.js";
 
 export const userRouter = Router();
 
-userRouter.get("/", userController.handleListAll);
-
-userRouter.get("/:uuid", validate(userUuidSchema), userController.handleFindById);
+userRouter.get("/", userController.handleSearch);
 
 userRouter.post("/", validate(userSchema), userController.handleCreate)
 
 userRouter.post("/bulk/create", validate(bulkUserSchema), userController.handleCreateMany)
 
-userRouter.get("/bulk/search", validate(searchUserSchema), userController.handleFindMany)
+userRouter.get("/search", validate(searchUserSchema), userController.handleSearchByCriteria)
 
 userRouter.delete("/:uuid", validate(userUuidSchema), userController.handleRemove)
 
-//userRouter.put("/", validate(searchUserSchema), userController.handleFindMany)
-
+userRouter.put("/", validate(searchUserSchema), userController.handleUpdate)
