@@ -1,13 +1,10 @@
 import type { Response, Request } from "express";
 import * as userService from "./user.service.js";
 import AppError from "../../shared/errors/AppErrors.js";
+import type { UpdateUsereData } from "./user.schema.js"
 
 export const handleListAll = async (_req: Request, res: Response) => {
   const users = await userService.listAll();
-
-  if (!users) {
-    throw new AppError(404, "No users found")
-  }
 
   return res.status(200).json(users);
 };
@@ -17,14 +14,19 @@ export const handleFindById = async (req: Request, res: Response) => {
 
   const user = await userService.findByUuid(uuid);
 
-  if (!user) {
-    throw new AppError(404, "User not found");
-  }
-
   return res.status(200).json(user);
 };
 
+export const handleFindMany = async (req: Request, res: Response) => {
+  const queryParams = req.query as unknown as UpdateUsereData
+
+  const users = await userService.findMany(queryParams)
+
+  return res.status(200).json(users)
+}
+
 export const handleCreate = async (req: Request, res: Response) => {
+  console.log(req.body)
   const user = await userService.create(req.body);
   console.log(req.body+" REQBODY")
 

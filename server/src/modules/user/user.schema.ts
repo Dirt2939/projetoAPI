@@ -7,38 +7,102 @@ export enum Role {
   ADMIN = "ADMIN",
 }
 
-export const userParamsSchema = z.object({
+export enum filter {
+  NAME = "NAME",
+  EMAIL = "EMAIL",
+}
+
+export const userUuidSchema = z.object({
   params: z.object({
     uuid: z.string().uuid({ message: "Invalid ID. Must be a UUID." }),
   }),
 });
 
-const greatPass = z
-  .string()
-  .min(8, "A senha deve ter no mínimo 8 caracteres")
-  .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula")
-  .regex(/[a-z]/, "A senha deve conter pelo menos uma letra minúscula")
-  .regex(/[0-9]/, "A senha deve conter pelo menos um número")
-  .regex(
-    /[^a-zA-Z0-9]/,
-    "A senha deve conter pelo menos um caractere especial (ex: @, #, $, etc.)",
-  );
+const greatPass = z.string().superRefine((val, ctx) => {
+  // 1. Verifica o tamanho mínimo
+  if (val.length < 8) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "A senha deve ter no mínimo 8 caracteres",
+    });
+    return z.NEVER; // O return z.NEVER para a execução aqui!
+  }
 
-export const userSchema = z
+  // 2. Verifica a letra maiúscula
+  if (!/[A-Z]/.test(val)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "A senha deve conter pelo menos uma letra maiúscula",
+    });
+    return z.NEVER;
+  }
+
+  // 3. Verifica a letra minúscula
+  if (!/[a-z]/.test(val)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "A senha deve conter pelo menos uma letra minúscula",
+    });
+    return z.NEVER;
+  }
+
+  // 4. Verifica o número
+  if (!/[0-9]/.test(val)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "A senha deve conter pelo menos um número",
+    });
+    return z.NEVER;
+  }
+
+  // 5. Verifica o caractere especial
+  if (!/[^a-zA-Z0-9]/.test(val)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message:
+        "A senha deve conter pelo menos um caractere especial (ex: @, #, $, etc.)",
+    });
+    return z.NEVER;
+  }
+});
+
+const userBodySchema = z
   .object({
-    name: z.string().min(4, { message: "Name is required." }),
+    name: z.string().min(4, { message: "Invalid name." }),
     password: greatPass,
     confirmPassword: greatPass,
-    email: z.string().email({ message: "Invalid email." }).transform(e => {return e.trim().toLowerCase()}),
+    email: z
+      .string()
+      .email({ message: "Invalid email." })
+      .transform((e) => {
+        return e.trim().toLowerCase();
+      }),
     phone: z.string().nullable().optional(),
-    role: z.nativeEnum(Role).default(Role.CUSTOMER),
+    role: z
+      .nativeEnum(Role, { message: "Invalid role" })
+      .default(Role.CUSTOMER),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
-    path: ["body", "password"],
+    path: ["password"],
   });
 
-export const bulkUserSchema = z.array(userSchema)
+export const userSchema = z.object({
+  body: userBodySchema
+});
 
-export type CreateUserData = z.infer<typeof userSchema>;
-export type CreateBulkUserBody = z.infer<typeof bulkUserSchema>
+export const searchUserSchema = z.object({
+  query: z.object({
+    name: z.string().optional(),
+    email: z.string().optional(),
+    role: z.nativeEnum(Role).optional(),
+  }),
+});
+
+export const bulkUserSchema = z.object({
+  body: z.array(userBodySchema)
+});
+
+export type UpdateUsereData = z.infer<typeof searchUserSchema>["query"];
+export type CreateUserData = z.infer<typeof userSchema>["body"];
+export type CreateBulkUserBody = z.infer<typeof bulkUserSchema>["body"];

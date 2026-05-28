@@ -1,17 +1,21 @@
 import { Router } from "express";
 import validate from "../../shared/middleware/validate.js";
-import  { userSchema, userParamsSchema } from "./user.schema.js";
+import  { userSchema, userUuidSchema, searchUserSchema, bulkUserSchema } from "./user.schema.js";
 import * as userController from "./user.controller.js";
-//import type { Request, Response } from "express";
 
 export const userRouter = Router();
 
 userRouter.get("/", userController.handleListAll);
 
-userRouter.get("/:uuid", validate(userParamsSchema), userController.handleFindById);
+userRouter.get("/:uuid", validate(userUuidSchema), userController.handleFindById);
 
 userRouter.post("/", validate(userSchema), userController.handleCreate)
 
-//userRouter.post("/", (req: Request, res: Response) => {console.log(req.body)})
+userRouter.post("/bulk/create", validate(bulkUserSchema), userController.handleCreateMany)
 
-userRouter.delete("/:uuid", validate(userParamsSchema), userController.handleRemove)
+userRouter.get("/bulk/search", validate(searchUserSchema), userController.handleFindMany)
+
+userRouter.delete("/:uuid", validate(userUuidSchema), userController.handleRemove)
+
+//userRouter.put("/", validate(searchUserSchema), userController.handleFindMany)
+

@@ -11,7 +11,7 @@ const errorHandler = (
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     if (error.code === 'P2025') {
       return res.status(404).json({
-        message: "The record you are trying to delete or update was not found."
+        message: "User doesn't exists"
       });
     }
   } 
