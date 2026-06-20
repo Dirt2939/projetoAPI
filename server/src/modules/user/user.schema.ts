@@ -13,7 +13,7 @@ export enum filter {
 }
 
 export const userUuidSchema = z.object({
-  query: z.object({
+  params: z.object({
     uuid: z.string().uuid({ message: "Invalid ID. Must be a UUID." }),
   }),
 });
@@ -116,7 +116,7 @@ export const updateUserSchema = userUuidSchema.merge(
 );
 
 export type UpdateUserDataBody = z.infer<typeof updateUserSchema>["body"];
-export type UpdateUserDataParams = z.infer<typeof updateUserSchema>["query"];
+export type UpdateUserDataParams = z.infer<typeof updateUserSchema>["params"];
 export type SearchUserData = z.infer<typeof searchUserSchema>["query"];
 export type CreateUserData = z.infer<typeof userSchema>["body"];
 export type CreateBulkUserData = z.infer<typeof bulkUserSchema>["body"];

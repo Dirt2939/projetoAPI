@@ -19,12 +19,12 @@ export const findByUuid = async (uuid: string) => {
   });
 };
 
-export const findMany = async (usersSearch: SearchUserData) => {
+export const findMany = async (userSearch: SearchUserData) => {
   return prisma.user.findMany({
     where: {
-      ...(usersSearch.name ? { name: { contains: usersSearch.name } } : {}),
-      ...(usersSearch.email ? { email: { contains: usersSearch.email } } : {}),
-      ...(usersSearch.role ? { role: usersSearch.role } : {}),
+      ...(userSearch.name ? { name: { contains: userSearch.name } } : {}),
+      ...(userSearch.email ? { email: { contains: userSearch.email } } : {}),
+      ...(userSearch.role ? { role: { equals: userSearch.role } } : {}),
     },
   });
 };
