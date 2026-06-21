@@ -7,15 +7,15 @@ import {
   CalendarDays,
   CalendarClock,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import type UserProfileData from "../types/User";
 
 const titlesKeys: Record<keyof UserProfileData, string> = {
   name: "Nome completo",
   email: "Email",
   phone: "Telefone",
-  ocuppacion: "Função",
-  status: "Status",
+  role: "Função",
+  isActive: "Status",
   createdAt: "Criado em",
   updatedAt: "Atulizado em",
 };
@@ -26,8 +26,8 @@ const iconKeys: Record<keyof UserProfileData, ReactNode> = {
   name: <User size={iconSize} />,
   email: <Mail size={iconSize} />,
   phone: <Phone size={iconSize} />,
-  ocuppacion: <Shield size={iconSize} />,
-  status: <CircleCheck size={iconSize} />,
+  role: <Shield size={iconSize} />,
+  isActive: <CircleCheck size={iconSize} />,
   createdAt: <CalendarDays size={iconSize} />,
   updatedAt: <CalendarClock size={iconSize} />,
 };
@@ -49,16 +49,27 @@ interface UserInfoProps {
 }
 
 function CardsProfile({ user }: UserInfoProps) {
+  const formateDataHour = (data: string) => {
+    const dataFormatada = new Intl.DateTimeFormat("pt-BR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(new Date(data));
+
+    return dataFormatada;
+  };
+
   return (
     <div className="">
       {Object.entries(user).map(([key, value]) => {
         const chave = key as keyof UserProfileData;
 
         return (
-          <>
+          <Fragment key={chave}>
             <div className="h-px w-full bg-linear-to-r from-transparent via-gray-700 to-transparent" />
             <div
-              key={chave}
               className="flex gap-4 pb-4 pt-4 items-center py-2 border-b border-white/5 last:border-0 size-fit"
             >
               <div className="bg-[#363b4d] items-center p-2 size-fit rounded-full">
@@ -67,11 +78,18 @@ function CardsProfile({ user }: UserInfoProps) {
               <div className="">
                 <h2 className="text-xs text-white">{titlesKeys[chave]}</h2>
                 <h3 className="text-gray-400">
-                  {chave === "status" ? (value ? "Ativo" : "Inativo") : value}
+                  {chave === "isActive"
+                    ? value
+                      ? "Ativo"
+                      : "Inativo"
+                    : (chave === "createdAt" || chave === "updatedAt") &&
+                        formateDataHour
+                      ? formateDataHour(value as string)
+                      : value}
                 </h3>
               </div>
             </div>
-          </>
+          </Fragment>
         );
       })}
     </div>

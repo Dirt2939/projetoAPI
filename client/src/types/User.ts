@@ -1,11 +1,11 @@
-type UserProfileData = {
+type User = {
   name: string;
   email: string;
   phone: string;
-  ocuppacion: 'CUSTOMER' | 'ADMIN' | 'MANAGER'; 
-  status: boolean; 
+  role: 'CUSTOMER' | 'ADMIN' | 'MANAGER'; 
+  isActive: boolean; 
   createdAt: string;
   updatedAt: string;
 }
 
-export { type UserProfileData as default };
+export { type User as default };
