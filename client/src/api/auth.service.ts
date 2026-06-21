@@ -1,4 +1,4 @@
-import { api } from "./axios";
+import api  from "./axios";
 
 export async function login(email: string, password: string) {
   try {
