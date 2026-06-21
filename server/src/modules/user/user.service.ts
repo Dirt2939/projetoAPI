@@ -16,6 +16,9 @@ export const findByUuid = async (uuid: string) => {
     where: {
       uuid,
     },
+    omit: {
+      password: true,
+    },
   });
 };
 

@@ -1,15 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { verifyToken } from "../utils/jwt.js";
 
-export interface AuthRequest extends Request {
-  user?: {
-    userId: string;
-    email: string;
-    role: string;
-  };
-}
-
-export const jwtAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -26,7 +18,7 @@ export const jwtAuth = (req: AuthRequest, res: Response, next: NextFunction) => 
     const payload = verifyToken(token);
 
     req.user = {
-      userId: payload.userUuid,
+      uuid: payload.userUuid,
       email: payload.email,
       role: payload.role,
     };

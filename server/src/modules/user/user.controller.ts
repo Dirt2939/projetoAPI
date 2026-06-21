@@ -63,3 +63,9 @@ export const handleUpdate = async (req: Request, res: Response) => {
 
   return res.status(200).json(user);
 };
+
+export const handleFindMe = async (req: Request, res: Response) => {
+  const user = await userService.findByUuid(req.user!.uuid);
+
+  return res.status(200).json(user);
+};

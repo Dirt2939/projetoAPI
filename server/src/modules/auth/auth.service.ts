@@ -7,13 +7,9 @@ export const login = async (email: string, pass: string) => {
     where: { email },
     select: {
       uuid: true,
-      name: true,
       password: true,
       email: true,
       role: true,
-      createdAt: true,
-      updatedAt: true,
-      isActive: true,
     },
   });
 
@@ -23,13 +19,11 @@ export const login = async (email: string, pass: string) => {
 
   if (!valid) return null;
 
-  const { password, ...preparedUser } = user;
-
   const token = generateToken({
     userUuid: user.uuid, 
     email: user.email,
     role: user.role,
   });
 
-  return { preparedUser, token };
+  return token;
 };
