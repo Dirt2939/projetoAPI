@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { login } from "../api/auth.service";
+import { login } from "../api/Auth/auth.service";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -27,7 +27,7 @@ function Login() {
         return;
       }
 
-      localStorage.setItem("user", JSON.stringify(res.data))
+      localStorage.setItem("token", res.data)
 
     } catch (error) {
       setError(true);

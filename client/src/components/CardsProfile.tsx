@@ -8,9 +8,11 @@ import {
   CalendarClock,
 } from "lucide-react";
 import { Fragment, type ReactNode } from "react";
-import type UserProfileData from "../types/User";
+import type UserData from "../types/User";
 
-const titlesKeys: Record<keyof UserProfileData, string> = {
+type UserProfileData = Omit<UserData, "uuid">
+
+const titlesKeys: Record<keyof UserProfileData, string>= {
   name: "Nome completo",
   email: "Email",
   phone: "Telefone",

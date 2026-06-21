@@ -1,13 +1,52 @@
 import { Pencil, UserRound } from "lucide-react";
 import CardsProfile from "../components/CardsProfile";
+import { useEffect, useState } from "react";
+import { getMe } from "../api/User/user.service";
+import type User from "../types/User";
 
 function Profile() {
-  const data = localStorage.getItem("user") ?? "";
-  const user = JSON.parse(data);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        setLoading(true);
+        const userData = await getMe();
+
+        setUser(userData);
+        setError(null);
+      } catch (err) {
+        setError("Erro ao carregar dados do usuário");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-zinc-100">
+        <p>Carregando...</p>
+      </div>
+    );
+  }
+
+  if (error || !user) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-zinc-100">
+        <p className="text-red-500">{error || "Usuário não encontrado"}</p>
+      </div>
+    );
+  }
 
   const { createdAt, updatedAt, uuid, ...userWithoutDates } = user;
   const userDates = { createdAt, updatedAt };
-  
+
   void uuid; // Só pra tirar o aviso
 
   const formateData = (data: string) => {
