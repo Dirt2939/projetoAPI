@@ -1,6 +1,5 @@
 import type { Response, Request } from "express";
 import * as userService from "./auth.service.js";
-//import AppError from "../../shared/errors/AppErrors.js";
 
 export const handleLogin = async (req: Request, res: Response) => {
   const email = req.body.email;

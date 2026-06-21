@@ -1,5 +1,6 @@
 import prisma from "../../shared/database/prisma.js";
 import bcryp from "bcrypt";
+import { generateToken } from "../../shared/utils/jwt.js";
 
 export const login = async (email: string, pass: string) => {
   const user = await prisma.user.findUnique({
@@ -24,5 +25,11 @@ export const login = async (email: string, pass: string) => {
 
   const { password, ...preparedUser } = user;
 
-  return preparedUser;
+  const token = generateToken({
+    userUuid: user.uuid, 
+    email: user.email,
+    role: user.role,
+  });
+
+  return { preparedUser, token };
 };
