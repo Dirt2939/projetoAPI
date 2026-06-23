@@ -30,7 +30,7 @@ function Profile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-zinc-100">
+      <div className="min-h-screen bg-main flex items-center justify-center text-primary">
         <p>Carregando...</p>
       </div>
     );
@@ -38,8 +38,8 @@ function Profile() {
 
   if (error || !user) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-zinc-100">
-        <p className="text-red-500">{error || "Usuário não encontrado"}</p>
+      <div className="min-h-screen bg-main flex items-center justify-center text-primary">
+        <p className="text-danger-light">{error || "Usuário não encontrado"}</p>
       </div>
     );
   }
@@ -60,38 +60,38 @@ function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 px-4 text-zinc-100">
+    <div className="min-h-screen bg-main px-4 text-primary">
       <header className="flex justify-between p-7">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Meu Perfil</h1>
 
-          <p className="text-zinc-500">Visualize suas informações pessoais</p>
+          <p className="text-secondary">Visualize suas informações pessoais</p>
         </div>
 
-        <button className="flex items-center gap-2 rounded-lg border border-amber-500 px-4 py-2 text-amber-400 transition-all hover:bg-amber-500/10 hover:shadow-lg hover:shadow-amber-500/10">
+        <button className="flex items-center gap-2 rounded-lg border border-accent px-4 py-2 text-accent transition-all hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/10">
           <Pencil size={18} />
           Editar Perfil
         </button>
       </header>
 
       {/* Perfil */}
-      <div className="mb-5 p-4 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center gap-3">
+      <div className="mb-5 p-4 rounded-xl bg-card border border-subtle flex items-center gap-3">
         <UserRound
           size={80}
-          className="bg-[#363b4d] rounded-full border-e-amber-950 size-30"
+          className="bg-elevated text-accent rounded-full border-e-subtle size-30"
         />
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl">{userWithoutDates.name}</h1>
-          <h2 className="text-gray-400">
+          <h2 className="text-secondary">
             Na plataforma desde {formateData(userDates.createdAt)}
           </h2>
           <div className="flex gap-2 items-center">
             <div
-              className={`w-4 h-4 rounded-full ${userWithoutDates.isActive ? "bg-green-400" : "bg-red-500"}`}
+              className={`w-4 h-4 rounded-full ${userWithoutDates.isActive ? "bg-success" : "bg-danger-light"}`}
             />
             <p
               className={
-                userWithoutDates.isActive ? "text-green-400" : "text-red-500"
+                userWithoutDates.isActive ? "text-success" : "text-danger-light"
               }
             >
               Conta {userWithoutDates.isActive ? "ativa" : "desativada"}
@@ -100,16 +100,16 @@ function Profile() {
         </div>
       </div>
 
-      <div className="mb-5 rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-        <h2 className="mb-5 text-lg font-semibold text-amber-400">
+      <div className="mb-5 rounded-xl border border-subtle bg-card p-6">
+        <h2 className="mb-5 text-lg font-semibold text-accent">
           Informações Pessoais
         </h2>
 
         <CardsProfile user={userWithoutDates} />
       </div>
 
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-        <h2 className="mb-5 text-lg font-semibold text-amber-400">
+      <div className="rounded-xl border border-subtle bg-card p-6">
+        <h2 className="mb-5 text-lg font-semibold text-accent">
           Informações da Conta
         </h2>
 

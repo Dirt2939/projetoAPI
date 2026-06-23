@@ -51,11 +51,11 @@ function Login() {
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4">
-      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-main px-4">
+      <div className="w-full max-w-md bg-card border border-subtle rounded-2xl p-8 shadow-2xl shadow-black/40">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-white">Login</h1>
-          <p className="text-zinc-400 mt-2">Entre para continuar</p>
+          <h1 className="text-3xl font-bold text-primary">Login</h1>
+          <p className="text-secondary mt-2">Entre para continuar</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -65,7 +65,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
-              className={`${error ? "border-red-500" : "border-zinc-700"} w-full px-4 py-3 rounded-xl bg-zinc-800 border text-white placeholder:text-zinc-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/20 transition`}
+              className={`${error ? "border-danger-light" : "border-subtle"} w-full px-4 py-3 rounded-xl bg-elevated border text-primary placeholder:text-muted focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/20 transition`}
             />
           </div>
 
@@ -75,32 +75,32 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Senha"
-              className={`${error ? "border-red-500" : "border-zinc-700"} w-full px-4 py-3 rounded-xl bg-zinc-800 border text-white placeholder:text-zinc-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/20 transition`}
+              className={`${error ? "border-danger-light" : "border-subtle"} w-full px-4 py-3 rounded-xl bg-elevated border text-primary placeholder:text-muted focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/20 transition`}
             />
           </div>
 
-          <label className="flex size-fit items-center justify-start gap-2 text-sm text-zinc-400 select-none hover:cursor-pointer p-1.5">
+          <label className="flex size-fit items-center justify-start gap-2 text-sm text-secondary select-none hover:cursor-pointer p-1.5">
             <button
               type="button"
               onClick={handleCheckbox}
-              className={`w-11 h-6 rounded-full p-1 transition flex items-center ${isChecked ? "bg-violet-600" : "bg-zinc-700"} hover:cursor-pointer`}
+              className={`w-11 h-6 rounded-full p-1 transition flex items-center ${isChecked ? "bg-accent" : "bg-subtle"} hover:cursor-pointer`}
             >
               <div
-                className={`w-4 h-4 bg-white rounded-full transition-transform ${isChecked ? "translate-x-5" : "translate-x-0"}`}
+                className={`w-4 h-4 bg-primary rounded-full transition-transform ${isChecked ? "translate-x-5" : "translate-x-0"}`}
               />
             </button>
             <span>Mostrar senha</span>
           </label>
 
           {error && (
-            <h3 className="text-red-500 text-center">
+            <h3 className="text-danger-light text-center">
               Credenciais incorretas.
             </h3>
           )}
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-violet-600 text-white font-medium hover:bg-violet-500 hover:scale-105 active:scale-[0.98] transition cursor-pointer"
+            className="w-full py-3 rounded-xl bg-accent text-main font-medium hover:bg-accent-hover hover:scale-105 active:scale-[0.98] transition cursor-pointer"
           >
             Entrar
           </button>

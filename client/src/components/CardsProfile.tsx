@@ -70,16 +70,16 @@ function CardsProfile({ user }: UserInfoProps) {
 
         return (
           <Fragment key={chave}>
-            <div className="h-px w-full bg-linear-to-r from-transparent via-gray-700 to-transparent" />
+            <div className="h-px w-full bg-linear-to-r from-transparent via-subtle to-transparent" />
             <div
-              className="flex gap-4 pb-4 pt-4 items-center py-2 border-b border-white/5 last:border-0 size-fit"
+              className="flex gap-4 pb-4 pt-4 items-center py-2 border-b border-subtle/60 last:border-0 size-fit"
             >
-              <div className="bg-[#363b4d] items-center p-2 size-fit rounded-full">
+              <div className="bg-elevated text-accent items-center p-2 size-fit rounded-full">
                 {iconKeys[chave]}
               </div>
               <div className="">
-                <h2 className="text-xs text-white">{titlesKeys[chave]}</h2>
-                <h3 className="text-gray-400">
+                <h2 className="text-xs text-primary">{titlesKeys[chave]}</h2>
+                <h3 className="text-secondary">
                   {chave === "isActive"
                     ? value
                       ? "Ativo"
